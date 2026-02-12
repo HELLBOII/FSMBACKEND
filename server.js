@@ -7,8 +7,19 @@ dotenv.config();
 
 const app = express();
 
-// Middleware
-app.use(cors());
+/* =========================
+   CORS CONFIGURATION
+========================= */
+app.use(
+  cors({
+    origin: "*", // Allow all origins
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
+// Handle preflight requests
+app.options("*", cors());
 app.use(express.json());
 
 // Create reusable transporter object using Gmail SMTP
@@ -83,6 +94,7 @@ const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Email service server running on http://localhost:${PORT}`);
 });
+
 
 
 
