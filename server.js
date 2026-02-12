@@ -41,8 +41,13 @@ transporter.verify(function (error, success) {
 });
 
 // Health check endpoint
-app.get('/health', (req, res) => {
+app.get('/', (req, res) => {
   res.json({ status: 'ok', message: 'Email service is running' });
+});
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', message: 'Email service health ok' });
 });
 
 // Send email endpoint
@@ -92,6 +97,7 @@ const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Email service server running on http://localhost:${PORT}`);
 });
+
 
 
 
