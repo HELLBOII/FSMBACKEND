@@ -1,25 +1,22 @@
 import express from 'express';
 import nodemailer from 'nodemailer';
-import cors from 'cors';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 const app = express();
 
-/* =========================
-   CORS CONFIGURATION
-========================= */
-app.use(
-  cors({
-    origin: "*", // Allow all origins
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
-
-// Handle preflight requests
-app.options("*", cors());
+// Middleware - Handle CORS manually to avoid path-to-regexp issues with Express 5
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
 app.use(express.json());
 
 // Create reusable transporter object using Gmail SMTP
@@ -41,13 +38,8 @@ transporter.verify(function (error, success) {
 });
 
 // Health check endpoint
-app.get('/', (req, res) => {
-  res.json({ status: 'ok', message: 'Email service is running' });
-});
-
-// Health check endpoint
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok', message: 'Email service health ok' });
+  res.json({ status: 'ok', message: 'Email service is running' });
 });
 
 // Send email endpoint
@@ -93,13 +85,8 @@ app.post('/api/send-email', async (req, res) => {
 });
 
 // Start server
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Email service server running on http://localhost:${PORT}`);
 });
-
-
-
-
-
 
