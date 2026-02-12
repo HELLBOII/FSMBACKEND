@@ -77,10 +77,9 @@ app.post('/api/send-email', async (req, res) => {
 });
 
 // Start server
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Email service server running on http://localhost:${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`Email user: ${process.env.EMAIL_USER || 'not configured'}`);
 });
+
 
