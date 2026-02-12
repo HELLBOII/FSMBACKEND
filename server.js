@@ -24,9 +24,7 @@ app.use(express.json());
 
 // Create reusable transporter object using Gmail SMTP
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
+  service: "gmail",
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS // Gmail App Password (not regular password)
@@ -94,6 +92,7 @@ const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Email service server running on http://localhost:${PORT}`);
 });
+
 
 
 
