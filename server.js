@@ -15,7 +15,7 @@ app.use(express.json());
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: process.env.EMAIL_USER || 'venu79000@gmail.com',
+    user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS // Gmail App Password (not regular password)
   },
 });
@@ -49,7 +49,7 @@ app.post('/api/send-email', async (req, res) => {
 
     // Send mail with defined transport object
     const info = await transporter.sendMail({
-      from: from || process.env.EMAIL_USER || 'venu79000@gmail.com',
+      from: from || process.env.EMAIL_USER,
       to: to,
       subject: subject,
       html: html,
@@ -80,7 +80,7 @@ app.post('/api/send-email', async (req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Email service server running on http://localhost:${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV}`);
-  console.log(`Email user: ${process.env.EMAIL_USER}`);
+  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`Email user: ${process.env.EMAIL_USER || 'not configured'}`);
 });
 
